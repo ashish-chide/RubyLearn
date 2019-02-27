@@ -4,11 +4,12 @@ class Vendor
 
   def tasks
     puts ""
-    puts "enter 1 to add new item"
-    puts "enter 2 to Remove item"
-    puts "enter 3 to search item"
-    puts "enter 4 to edit list item"
-    puts "enter 5 to list item"
+    puts "Enter 1 to add new item"
+    puts "Enter 2 to Remove item"
+    puts "Enter 3 to search item"
+    puts "Enter 4 to edit list item"
+    puts "Enter 5 to list item"
+    puts "Enter 6 to Switch to Cutomer"
 
     tasks_input = gets.strip.to_i
 
@@ -38,6 +39,9 @@ class Vendor
         list_item.list_product
         v = Vendor.new
         v.tasks
+      when  6
+        c = Customer.new
+        c.tasks
       else
         puts "select correct values!"
       end

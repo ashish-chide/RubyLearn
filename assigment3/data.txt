@@ -1,3 +1,3 @@
-{"id":1,"name":"biscuit","price":10,"company_name":"asd","stock":9}
-{"id":2,"name":"tea","price":10,"company_name":"asd","stock":2}
-{"id":3,"name":"coffee","price":15,"company_name":"asd","stock":3}
+{"id":1,"name":"biscuit","price":20,"company_name":"asd","stock":1}
+{"id":2,"name":"tea","price":7,"company_name":"aksd","stock":12}
+{"id":3,"name":"coffee","price":15,"company_name":"asd","stock":2}
