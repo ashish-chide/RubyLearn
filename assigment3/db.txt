@@ -1,0 +1,6 @@
+1|toy|12|abc|12
+2|train|12|abc|12
+4|newhorse|120|abc|1
+5|asd|123|asd|122
+6|monkey|130|abc|0
+7|car|123|abc|12
