@@ -4,19 +4,6 @@ require_relative 'file'
 class Product
   include FileOperation
 
-  def new_product
-    input_arr = ["name" , "price" , "Company Name","stock"]
-    product = []
-    input_arr.each do  |x|
-      product << user_input(x)
-      end
-    id = new_id + 1
-    product.unshift(id)
-    p product
-    append(to_line(product), "db.txt")
-    puts "The Item is successfully added"
-  end
-
   def user_input(entity)
     puts "Enter the #{entity}"
     entity = gets.strip
@@ -34,6 +21,19 @@ class Product
 
   def list_product
      puts File.read("db.txt")
+  end
+
+  def new_product
+    input_arr = ["name" , "price" , "Company Name","stock"]
+    product = []
+    input_arr.each do  |x|
+      product << user_input(x)
+      end
+    id = new_id + 1
+    product.unshift(id)
+    p product
+    append(to_line(product), "db.txt")
+    puts "The Item is successfully added"
   end
 
   def remove_product
@@ -65,10 +65,8 @@ class Product
     return_product.each do |x|
       product = x.split("|")
       if product[0].to_i == i
-          puts " Enter the new name"
-          n = gets.strip
-          puts " Enter the new Price"
-          pr = gets.strip.to_i
+          n = user_input("new name")
+          pr  = user_input("new Price")
           product[1] = n
           product[2] = pr
           update << product
