@@ -24,7 +24,7 @@ class Product
   end
 
   def new_product
-    input_arr = ["name" , "price" , "Company Name","stock"]
+    input_arr = ["name" , "price" , "Company Name", "stock"]
     product = []
     input_arr.each do  |x|
       product << user_input(x)
