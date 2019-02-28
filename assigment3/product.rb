@@ -1,138 +1,120 @@
 require 'json'
+require_relative 'file'
+
 class Product
+  include FileOperation
+
   def new_product
-    puts "Enter the name of the product"
-    name = gets.strip.to_s
-    puts "Enter the price of the product"
-    price =  gets.strip.to_i
-    puts "Enter the Company name"
-    cname = gets.strip.to_s
-    puts "Enter the number of stock for the item"
-    stock = gets.strip.to_i
-    u = new_id
-    id = u + 1
-    product = {id: id, name: name ,price: price ,company_name: cname ,  stock: stock }
-    File.open("data.txt", "a") { |file| file.puts JSON.dump(product) }
+    input_arr = ["name" , "price" , "Company Name","stock"]
+    product = []
+    input_arr.each do  |x|
+      product << user_input(x)
+      end
+    id = new_id + 1
+    product.unshift(id)
+    p product
+    append(to_line(product), "db.txt")
     puts "The Item is successfully added"
   end
 
-  def new_id
-    f = return_hash
-    last_added_product = JSON.parse(f.last)
-    return last_added_product["id"].to_i
+  def user_input(entity)
+    puts "Enter the #{entity}"
+    entity = gets.strip
   end
 
-  def return_hash
-     f = File.read("data.txt").split("\n")
-     return f
+  def new_id
+    f = File.read("db.txt")
+    product  = f.split("\n").last.split("|")[0].to_i
+  end
+
+  def return_product
+    f = File.read("db.txt")
+    product  = f.split("\n")
   end
 
   def list_product
-     f = return_hash
-     f.each do |item|
-        data = JSON.load(item)
-        puts data
-        end
+     puts File.read("db.txt")
   end
 
   def remove_product
-    puts "Enter the id of product to be removed"
-    id = gets.strip.to_i
-    f = return_hash
+    id = user_input("id").to_i
     new_data = []
-    f.each do |item|
-      data = JSON.load(item)
-      if data["id"] != id
-        new_data << data
+    return_product.each do |x|
+      product = x.split("|")
+      if product[0].to_i != id
+        new_data << product
       end
-    update_db(new_data)
     end
+    update_data(new_data)
    end
 
   def search_product
-    puts "Enter the Name of the product to be searched"
-    n = gets.strip
-    new_data = []
-    f = return_hash
-    f.each do |item|
-      data = JSON.load(item)
-      if  data["name"] =~ /#{n}/
-        new_data << data
-      # else
-      #   puts "Looks like Item with name '#{n}' does not exists"
+    n = user_input("Name to seacrh")
+    search = []
+    return_product.each do |x|
+      product = x.split("|")
+      if product[1]=~ /#{n}/
+        p product
       end
     end
-    p new_data
   end
 
   def edit_product
-    puts "Enter the product id to be updated"
-    i = gets.strip.to_i
-    f = return_hash
-    new_data = []
-    f.each do |item|
-       data = JSON.load(item)
-       if  data["id"] == i
+    i = user_input("Product id").to_i
+    update = []
+    return_product.each do |x|
+      product = x.split("|")
+      if product[0].to_i == i
           puts " Enter the new name"
           n = gets.strip
           puts " Enter the new Price"
           pr = gets.strip.to_i
-          data["name"] = n
-          data["price"] = pr
-          new_data << data
+          product[1] = n
+          product[2] = pr
+          update << product
        else
-          new_data << data
+          update << product
        end
+      end
+      update_data(update)
     end
-    update_db(new_data)
-  end
+
+    def update_data(data)
+      File.open("db.txt", "w")
+      data.each do |x|
+        append(to_line(x), "db.txt")
+        end
+    end
 
   def buy_product
     list_product
-    puts "Enter the id of product to Buy it !"
-    i = gets.strip.to_i
+    i = user_input("id").to_i
     new_data = []
-    f = return_hash
-    f.each do |item|
-      data = JSON.load(item)
-      if data["id"] == i && data["stock"] > 0
-        place_order(data["id"],data["name"])
-        data["stock"] -= 1
+    return_product.each do |x|
+      product = x.split("|")
+      if product[0].to_i == i && product[4].to_i > 0
+        place_order(product[0],product[1])
+        quantity =  product[4].to_i - 1
+        product[4] = quantity.to_s
         puts "order has been placed successfully"
-        new_data << data
-      elsif  data["id"] == i && data["stock"] < 1
-         puts "Out of stock"
-         new_data << data
+        new_data << product
+      elsif product[0].to_i == i && product[4].to_i < 1
+        puts "Out of stock"
+        new_data << product
       else
-         new_data << data
+        new_data << product
       end
+      update_data(new_data)
     end
-    update_db(new_data)
   end
 
   def place_order(id , name )
-    puts "Enter the card number !"
-    card_no = gets.strip.to_i
-    puts "Enter the cvv !"
-    cvv = gets.strip.to_i
-
-    File.open("order.txt" , "a") do |file|
-          order_details = { id: id , name: name, card: card_no, cvv: cvv }
-          file.puts JSON.dump(order_details)
-      end
+    card_no = user_input("card Number")
+    cvv = user_input( "cvv")
+    order_details = [ id ,name,card_no,cvv ]
+    append(to_line(order_details), "order.txt")
   end
-
-  def update_db(data)
-      File.open("data.txt" , "w") do |file|
-       data.each do |item|
-       file.puts JSON.dump(item)
-       end
-    end
-  end
-
-
 end
-
 
 
 
