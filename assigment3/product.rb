@@ -10,8 +10,12 @@ class Product
   end
 
   def new_id
+    if File.zero?("db.txt")
+    product = 1
+    else
     f = File.read("db.txt")
     product  = f.split("\n").last.split("|")[0].to_i
+    end
   end
 
   def return_product
@@ -25,14 +29,15 @@ class Product
 
   def new_product
     input_arr = ["name" , "price" , "Company Name", "stock"]
-    product = []
+    a = []
     input_arr.each do  |x|
-      product << user_input(x)
+      a << user_input(x)
       end
     id = new_id + 1
-    product.unshift(id)
-    p product
-    append(to_line(product), "db.txt")
+    a.unshift(id)
+    product = {id: a[0],name: a[1],price: a[2],company: a[3] ,stock:a[4]}
+    is_empty("db.txt" ,product)
+    append(to_lineh(product), "db.txt")
     puts "The Item is successfully added"
   end
 
