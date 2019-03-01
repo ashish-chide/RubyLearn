@@ -54,7 +54,7 @@ class Product
    end
 
   def search_product
-    n = user_input("Name to seacrh")
+    n = user_input("Name to search")
     search = []
     return_product.each do |x|
       product = x.split("|")
