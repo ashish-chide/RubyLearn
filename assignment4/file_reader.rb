@@ -14,27 +14,32 @@ class FileReader
   def dynamic_init(klass,arg,arr)
     klass.class_eval do
       define_method :initialize do |param = {}|
-        @name = param[:name]
-        @price = param[:price]
-        @edition = param[:edition]
+        arg.each_with_index do |x,index|
+          instance_variable_set("@#{x}", param.values[index])
+          end
         end
-    arg.each do |x|
-      define_method "set_#{x}" do |val|
-        instance_variable_set("@#{x}", val)
+      arg.each do |x|
+        define_method "set_#{x}" do |val|
+          instance_variable_set("@#{x}", val)
+          end
+        define_method "get_#{x}" do
+          instance_variable_get("@#{x}")
         end
-      define_method "get_#{x}" do
-        instance_variable_get("@#{x}")
-      end
-     end
+       end
     end
-    create_objects(klass, arr)
+    create_objects(klass, arr,arg)
   end
 
-  def create_objects(klass, arr)
+  def create_objects(klass, arr,arg)
     arr.each_with_index do |x, index|
       next if index == 0
       row = x.split(",")
-      p a = klass.new({name: row[0], price: row[1], edition: row[2]})
+      hash= {}
+      arg.each_with_index do |y|
+        hash[y] = row[index]
+      end
+      p hash
+      p a = klass.new(hash)
     end
   end
 
