@@ -1,1 +1,2 @@
 lineame|price|company|stock
+1|toystory|12|zf|123

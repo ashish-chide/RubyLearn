@@ -58,5 +58,5 @@ class FileReader
   end
 end
 
-file_reader = FileReader.new("marathi_books.csv")
+file_reader = FileReader.new("water_bottles.csv")
 file_reader.read_header
